@@ -1,1 +1,1 @@
-# AutoTranslator
+Create an application enabling the translation of phrases sent to the server. Utilize the Google Translator API for translation. The application should support caching translated data using a file system. The modules of the application should be loosely coupled.

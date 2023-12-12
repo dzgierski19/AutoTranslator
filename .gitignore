@@ -1,0 +1,6 @@
+pytania.txt
+node_modules
+.env
+/data/crypto.json
+/src/app/main.ts
+/translator

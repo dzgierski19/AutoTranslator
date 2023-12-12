@@ -47,7 +47,7 @@ class Translator extends FileModifier {
       translatedText: translation,
       translatedTextLanguage: targetLanguage,
     };
-    return JSON.stringify([file], null, 2);
+    return JSON.stringify(file, null, 2);
   };
 
   translateText = async (
@@ -59,6 +59,7 @@ class Translator extends FileModifier {
     }
     await this.isDataAvailableInJSON(text);
     const data = await this.stringifyData(text, targetLanguage);
+    console.log(data);
     await this.addDataToJSON(data);
   };
 
@@ -70,11 +71,12 @@ class Translator extends FileModifier {
     for (const value of objValues) {
       if (typeof value === "object") {
         console.log(`${value}`);
-        return this.translateObject(value, language);
+        await this.translateObject(value, language);
+        return;
       }
       if (typeof value === "number") {
-        const number = value.toString();
-        await this.translateText(number, language);
+        // const number = value.toString();
+        // await this.translateText(number, language);
       } else await this.translateText(value, language);
     }
     return;
@@ -92,7 +94,18 @@ const HarryKane = {
   },
 };
 
-const arr = ["pozycja", "atakujący", "ulotka", "DUPA", "ulotka"];
+const RonaldinhoGaucho = {
+  pozycja: "pomocnik",
+  informacje: {
+    narodowość: 16,
+    statystyki: {
+      ilość_bramek: "szesnaście",
+      lepsza_noga: "lewa",
+    },
+  },
+};
+
+const arr = ["pozycja", "atakujący", "ulotka", "powtórka", "ulotka"];
 
 // błąd gdy za ilość_bramek wstawię liczbę, ignoruję rowniez kolejny klucz
 
@@ -104,6 +117,7 @@ async function main() {
   // await translator.translateText("hello", LANGUAGES.POLISH);
   // await translator.translateText("hello", LANGUAGES.POLISH);
   await translator.translateText(HarryKane, LANGUAGES.ENGLISH);
+  await translator.translateText(RonaldinhoGaucho, LANGUAGES.ENGLISH);
   await translator.translateText(arr, LANGUAGES.ENGLISH);
 }
 

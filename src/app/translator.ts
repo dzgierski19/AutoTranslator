@@ -2,6 +2,7 @@ const { Translate } = require("@google-cloud/translate").v2;
 import "dotenv/config";
 import fs from "fs";
 import { FileModifier } from "./fileModifier";
+import { LANGUAGES } from "./TranslatorType";
 
 const CREDENTIALS = JSON.parse(process.env.CREDENTIALS ?? "");
 
@@ -50,21 +51,60 @@ class Translator extends FileModifier {
   };
 
   translateText = async (
-    text: string,
+    text: string | object,
     targetLanguage: string
   ): Promise<void> => {
+    if (typeof text === "object") {
+      return this.translateObject(text, targetLanguage);
+    }
     await this.isDataAvailableInJSON(text);
     const data = await this.stringifyData(text, targetLanguage);
     await this.addDataToJSON(data);
   };
+
+  private translateObject = async (
+    data: Object,
+    language: string
+  ): Promise<void> => {
+    const objValues = Object.values(data);
+    for (const value of objValues) {
+      if (typeof value === "object") {
+        console.log(`${value}`);
+        return this.translateObject(value, language);
+      }
+      if (typeof value === "number") {
+        const number = value.toString();
+        await this.translateText(number, language);
+      } else await this.translateText(value, language);
+    }
+    return;
+  };
 }
+
+const HarryKane = {
+  pozycja: "napastnik",
+  informacje: {
+    narodowość: 16,
+    statystyki: {
+      ilość_bramek: "szesnaście",
+      lepsza_noga: "prawa",
+    },
+  },
+};
+
+const arr = ["pozycja", "atakujący", "ulotka", "DUPA", "ulotka"];
+
+// błąd gdy za ilość_bramek wstawię liczbę, ignoruję rowniez kolejny klucz
 
 async function main() {
   const translator = new Translator();
-  await translator.translateText("hello", "ru");
-  await translator.translateText("hello", "ru");
-  await translator.translateText("trawa", "tu");
-  await translator.translateText("hello", "pl");
+  // await translator.translateText("hello", LANGUAGES.ENGLISH);
+  // await translator.translateText("hello", LANGUAGES.FRENCH);
+  // await translator.translateText("trawa", LANGUAGES.FRENCH);
+  // await translator.translateText("hello", LANGUAGES.POLISH);
+  // await translator.translateText("hello", LANGUAGES.POLISH);
+  await translator.translateText(HarryKane, LANGUAGES.ENGLISH);
+  await translator.translateText(arr, LANGUAGES.ENGLISH);
 }
 
 main();

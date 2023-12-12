@@ -16,8 +16,8 @@ export class FileModifier implements IFileModifier {
   }
 
   async addDataToJSON(data: string): Promise<void> {
-    const hello = await this.isDataAvailableInJSON(data);
-    if (hello) {
+    const dataIfInJSON = await this.isDataAvailableInJSON(data);
+    if (dataIfInJSON) {
       console.log("already in database");
       return;
     }
@@ -56,23 +56,26 @@ export class FileModifier implements IFileModifier {
   }
 }
 
-const obj = { Hello: "nie", Piłka: "okrągła" };
-const objString = JSON.stringify(obj, null, 2);
+// const obj = { Hello: { Kosz: "nie", Piłka: "okrągła" } };
+// const objString = JSON.stringify(obj, null, 2);
 
 async function main() {
   const hello = new FileModifier();
   const answer = await hello.isDataAvailableInJSON("element");
   console.log(answer);
   await hello.addDataToJSON("element");
-  await hello.addDataToJSON("element2");
-  await hello.addDataToJSON("element2");
-  await hello.addDataToJSON("element3");
-  await hello.addDataToJSON("element3");
+  // await hello.addDataToJSON("element2");
+  // await hello.addDataToJSON("element2");
+  // await hello.addDataToJSON("element3");
+  // await hello.addDataToJSON("element3");
   await hello.readJSONData();
   const check = await hello.isDataAvailableInJSON("element");
-  const method = await hello.method(objString);
-  console.log(method);
+  // const method = await hello.method(objString);
+  // console.log(method);
   console.log(check);
+  const JSONED = await hello.readJSONData();
+  const parse = JSON.parse(JSONED);
+  console.log(parse);
 }
 
 main();

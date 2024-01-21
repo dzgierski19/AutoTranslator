@@ -1,6 +1,24 @@
 pytania.txt
-node_modules
 .env
 /data/crypto.json
 /src/app/main.ts
 /translator
+/node_modules
+
+
+1. Zrobic file handler w metodach powinno być dodawane pathy
+2. CasheHandler => wczytywanie, zapisuwanie, hashowanie
+3. Flow
+    1. przychodzi request
+    2. dzielisz po kluczach
+    3. sprawdzasz wartość dla klucza jest juz zapisana
+        1. jak tak to elo zwracasz i zapisujesz wartosc klucza w nowym przetłumaczonym obiekcie
+        2. jak nie to zrobisz request tłumaczysz
+            1, zapisujesz do cache
+            2. przypisujesz do klucza
+    4. zwracasz cały przetłumaczony obiekt
+
+for (key in obj) {
+    obj[key] === wartosc klucza
+}
+
